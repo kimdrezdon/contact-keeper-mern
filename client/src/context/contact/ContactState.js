@@ -1,4 +1,4 @@
-import React, { useReducer, setState } from 'react';
+import React, { useReducer } from 'react';
 // Generates random id for hard coded data
 import { v4 as uuidv4 } from 'uuid';
 import ContactContext from './contactContext';
@@ -38,7 +38,8 @@ const ContactState = props => {
 				type: 'professional'
 			}
 		],
-		current: null
+		current: null,
+		filtered: null
 	};
 
 	// State allows us to access anything in our state and dispatch allows us to dispatch objects to the reducer
@@ -66,17 +67,27 @@ const ContactState = props => {
 		dispatch({ type: UPDATE_CONTACT, payload: contact });
 	};
 	// Filter Contacts
+	const filterContacts = search => {
+		dispatch({ type: FILTER_CONTACTS, payload: search });
+	};
 	// Clear Filter
+	const clearFilter = () => {
+		dispatch({ type: CLEAR_FILTER });
+	};
+
 	return (
 		<ContactContext.Provider
 			value={{
 				contacts: state.contacts,
 				current: state.current,
+				filtered: state.filtered,
 				addContact,
 				deleteContact,
 				setCurrent,
 				clearCurrent,
-				updateContact
+				updateContact,
+				filterContacts,
+				clearFilter
 			}}
 		>
 			{props.children}

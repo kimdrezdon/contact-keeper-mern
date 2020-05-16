@@ -5,6 +5,15 @@ const ContactForm = () => {
 	const contactContext = useContext(ContactContext);
 	const { addContact, current, updateContact, clearCurrent } = contactContext;
 
+	// Component level state for form fields
+	const [contact, setContact] = useState({
+		name: '',
+		email: '',
+		phone: '',
+		type: 'personal'
+	});
+
+	// If a contact is saved in current (editing), display that contact. Else reset form fields
 	useEffect(() => {
 		if (current !== null) {
 			setContact(current);
@@ -19,16 +28,10 @@ const ContactForm = () => {
 		// Only if contactContext or current is changed
 	}, [contactContext, current]);
 
-	// Component level state for form
-	const [contact, setContact] = useState({
-		name: '',
-		email: '',
-		phone: '',
-		type: 'personal'
-	});
-
+	// Destructure contact properties
 	const { name, email, phone, type } = contact;
 
+	// Update component level state of contact as fields are updated
 	const onChange = e => {
 		setContact({
 			...contact,
@@ -36,6 +39,7 @@ const ContactForm = () => {
 		});
 	};
 
+	// If not editing an existing contact, add contact. Else update contact.
 	const onSubmit = e => {
 		e.preventDefault();
 		if (current === null) {
@@ -46,6 +50,7 @@ const ContactForm = () => {
 		clearCurrent();
 	};
 
+	// Clear form fields and remove current contact
 	const clearAll = () => {
 		clearCurrent();
 	};
