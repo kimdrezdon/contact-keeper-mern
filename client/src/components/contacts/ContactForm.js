@@ -13,6 +13,9 @@ const ContactForm = () => {
 		type: 'personal'
 	});
 
+	// Destructure contact properties
+	const { name, email, phone, type } = contact;
+
 	// If a contact is saved in current (editing), display that contact. Else reset form fields
 	useEffect(() => {
 		if (current !== null) {
@@ -27,9 +30,6 @@ const ContactForm = () => {
 		}
 		// Only if contactContext or current is changed
 	}, [contactContext, current]);
-
-	// Destructure contact properties
-	const { name, email, phone, type } = contact;
 
 	// Update component level state of contact as fields are updated
 	const onChange = e => {
