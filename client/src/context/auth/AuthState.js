@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import axios from 'axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
+import setAuthToken from '../../utils/setAuthToken';
 import {
 	REGISTER_SUCCESS,
 	REGISTER_FAIL,
@@ -26,7 +27,20 @@ const AuthState = props => {
 	const [state, dispatch] = useReducer(authReducer, initialState);
 
 	//Load User - need to do on each page load to keep the user authenticated because jwt is stateless. Get the user data from the backend and put it into our state
-	const loadUser = () => console.log('loaduser');
+	const loadUser = async () => {
+		// Load token into global headers
+		if (localStorage.token) {
+			setAuthToken(localStorage.token);
+		}
+
+		try {
+			// Response will be the user, password excluded
+			const res = await axios.get('/api/auth');
+			dispatch({ type: USER_LOADED, payload: res.data });
+		} catch (err) {
+			dispatch({ type: AUTH_ERROR });
+		}
+	};
 
 	// Register User
 	const register = async formData => {
@@ -41,6 +55,8 @@ const AuthState = props => {
 			const res = await axios.post('/api/users', formData, config);
 			// Response will be the jwt token from back-end
 			dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+
+			loadUser();
 		} catch (err) {
 			// Response will be error message from back-end
 			dispatch({ type: REGISTER_FAIL, payload: err.response.data.msg });

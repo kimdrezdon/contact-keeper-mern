@@ -27,6 +27,7 @@ const User = require('../models/User');
 router.get('/', auth, async (req, res) => {
 	try {
 		// Find user in the database but exclude password from the response
+		// User id comes from auth middleware decoding the token
 		const user = await User.findById(req.user.id).select('-password');
 		res.json(user);
 	} catch (err) {

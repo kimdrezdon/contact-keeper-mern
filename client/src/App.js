@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+// Import components
 import Navbar from './components/layout/Navbar';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
@@ -7,11 +9,21 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Alerts from './components/layout/Alerts';
 
+// Import context
 import ContactState from './context/contact/ContactState';
 import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
 
+// Import auth function
+import setAuthToken from './utils/setAuthToken';
+
+// Import CSS file
 import './App.css';
+
+// Load token into global headers
+if (localStorage.token) {
+	setAuthToken(localStorage.token);
+}
 
 const App = () => {
 	return (
