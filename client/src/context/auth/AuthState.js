@@ -19,7 +19,7 @@ const AuthState = props => {
 		token: localStorage.getItem('token'),
 		isAuthenticated: null,
 		user: null,
-		loading: true,
+		loading: true, // Used by PrivateRoute
 		error: null
 	};
 
