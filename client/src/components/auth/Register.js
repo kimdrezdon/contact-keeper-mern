@@ -9,12 +9,13 @@ const Register = props => {
 	const { register, error, clearErrors, isAuthenticated } = authContext;
 	const { setAlert } = alertContext;
 
-	// Checks if received an error back from register() response
 	useEffect(() => {
+		// If registration successful, redirect to home page
 		if (isAuthenticated) {
 			props.history.push('/');
 		}
 
+		// Checks if received an error back from register() response
 		if (error === 'User already exists') {
 			setAlert(error, 'danger');
 			clearErrors();

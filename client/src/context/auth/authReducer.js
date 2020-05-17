@@ -18,17 +18,8 @@ export default (state, action) => {
 				user: action.payload,
 				loading: false
 			};
-		case AUTH_ERROR:
-			// Clear token in local storage
-			localStorage.removeItem('token');
-			return {
-				...state,
-				token: null,
-				isAuthenticated: false,
-				loading: false,
-				user: null
-			};
 		case REGISTER_SUCCESS:
+		case LOGIN_SUCCESS:
 			// Sets token in local storage
 			localStorage.setItem('token', action.payload.token);
 			return {
@@ -39,6 +30,9 @@ export default (state, action) => {
 				loading: false
 			};
 		case REGISTER_FAIL:
+		case AUTH_ERROR:
+		case LOGIN_FAIL:
+		case LOGOUT:
 			// Clear token in local storage
 			localStorage.removeItem('token');
 			return {
@@ -48,11 +42,6 @@ export default (state, action) => {
 				loading: false,
 				user: null,
 				error: action.payload
-			};
-		case LOGIN_SUCCESS:
-			return {
-				...state,
-				user: action.payload
 			};
 		case CLEAR_ERRORS:
 			return {

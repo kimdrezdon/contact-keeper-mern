@@ -64,10 +64,30 @@ const AuthState = props => {
 	};
 
 	// Login User
-	const login = () => console.log('login');
+	const login = async formData => {
+		// Add header to request
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		};
+		try {
+			// Send post request to back-end with login form data in the req.body
+			const res = await axios.post('/api/auth', formData, config);
+			// Response will be the jwt token from back-end
+			dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+
+			loadUser();
+		} catch (err) {
+			// Response will be error message from back-end
+			dispatch({ type: LOGIN_FAIL, payload: err.response.data.msg });
+		}
+	};
 
 	// Logout
-	const logout = () => console.log('logout');
+	const logout = () => {
+		dispatch({ type: LOGOUT });
+	};
 
 	// Clear Errors
 	const clearErrors = () => {
