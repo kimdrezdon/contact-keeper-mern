@@ -75,11 +75,12 @@ router.post(
 				payload,
 				config.get('jwtSecret'),
 				{
-					// expires in 3600 ms which is an hour
+					// Expires in 3600 ms which is an hour
 					expiresIn: 3600
 				},
 				(err, token) => {
 					if (err) throw err;
+					// Respond with jwt token
 					res.json({ token });
 				}
 			);

@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import axios from 'axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
 import {
@@ -24,27 +25,38 @@ const AuthState = props => {
 	// State allows us to access anything in our state and dispatch allows us to dispatch objects to the reducer
 	const [state, dispatch] = useReducer(authReducer, initialState);
 
+	//Load User - need to do on each page load to keep the user authenticated because jwt is stateless. Get the user data from the backend and put it into our state
+	const loadUser = () => console.log('loaduser');
+
 	// Register User
-	const registerUser = user => {
-		dispatch({ type: REGISTER_SUCCESS, payload: user });
+	const register = async formData => {
+		// Add header to request
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		};
+		try {
+			// Send post request to back-end with register form data in the req.body
+			const res = await axios.post('/api/users', formData, config);
+			// Response will be the jwt token from back-end
+			dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+		} catch (err) {
+			// Response will be error message from back-end
+			dispatch({ type: REGISTER_FAIL, payload: err.response.data.msg });
+		}
 	};
 
-	// Register Fail
-
-	// User Loaded
-
-	// Auth Error
-
-	// Login Success
-	const loginUser = user => {
-		dispatch({ type: LOGIN_SUCCESS, payload: user });
-	};
-
-	// Login Fail
+	// Login User
+	const login = () => console.log('login');
 
 	// Logout
+	const logout = () => console.log('logout');
 
 	// Clear Errors
+	const clearErrors = () => {
+		dispatch({ type: CLEAR_ERRORS });
+	};
 
 	return (
 		<AuthContext.Provider
@@ -54,8 +66,11 @@ const AuthState = props => {
 				user: state.user,
 				loading: state.loading,
 				error: state.error,
-				registerUser,
-				loginUser
+				loadUser,
+				register,
+				login,
+				logout,
+				clearErrors
 			}}
 		>
 			{props.children}

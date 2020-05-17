@@ -1,12 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 
 const Register = () => {
 	const authContext = useContext(AuthContext);
 	const alertContext = useContext(AlertContext);
-	const { registerUser } = authContext;
+
+	const { register, error, clearErrors } = authContext;
 	const { setAlert } = alertContext;
+
+	// Checks if received an error back from register() response
+	useEffect(() => {
+		if (error === 'User already exists') {
+			setAlert(error, 'danger');
+			clearErrors();
+		}
+	});
 
 	// Component level state for form fields
 	const [user, setUser] = useState({
@@ -35,7 +44,11 @@ const Register = () => {
 		} else if (password !== password2) {
 			setAlert('Passwords must match', 'danger');
 		} else {
-			registerUser(user);
+			register({
+				name,
+				email,
+				password
+			});
 		}
 	};
 
