@@ -1,9 +1,12 @@
 import React, { useContext, useState } from 'react';
 import AuthContext from '../../context/auth/authContext';
+import AlertContext from '../../context/alert/alertContext';
 
 const Register = () => {
 	const authContext = useContext(AuthContext);
+	const alertContext = useContext(AlertContext);
 	const { registerUser } = authContext;
+	const { setAlert } = alertContext;
 
 	// Component level state for form fields
 	const [user, setUser] = useState({
@@ -27,7 +30,13 @@ const Register = () => {
 	// Register user
 	const onSubmit = e => {
 		e.preventDefault();
-		registerUser(user);
+		if (name === '' || email === '' || password === '') {
+			setAlert('Please enter all fields', 'danger');
+		} else if (password !== password2) {
+			setAlert('Passwords must match', 'danger');
+		} else {
+			registerUser(user);
+		}
 	};
 
 	return (
@@ -43,33 +52,39 @@ const Register = () => {
 						name='name'
 						value={name}
 						onChange={onChange}
+						required
 					/>
 				</div>
 				<div className='form-group'>
 					<label htmlFor='email'>Email Address</label>
 					<input
-						type='text'
+						type='email'
 						name='email'
 						value={email}
 						onChange={onChange}
+						required
 					/>
 				</div>
 				<div className='form-group'>
 					<label htmlFor='password'>Password</label>
 					<input
-						type='text'
+						type='password'
 						name='password'
 						value={password}
 						onChange={onChange}
+						required
+						minLength='6'
 					/>
 				</div>
 				<div className='form-group'>
 					<label htmlFor='password2'>Confirm Password</label>
 					<input
-						type='text'
+						type='password'
 						name='password2'
 						value={password2}
 						onChange={onChange}
+						required
+						minLength='6'
 					/>
 				</div>
 
